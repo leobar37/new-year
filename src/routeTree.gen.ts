@@ -14,6 +14,7 @@ import { Route as ProcessingRouteImport } from './routes/processing'
 import { Route as CustomScriptDotjsRouteImport } from './routes/customScript[.]js'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultResultIdRouteImport } from './routes/result.$resultId'
+import { Route as ExperienceResultIdRouteImport } from './routes/experience.$resultId'
 import { Route as ApiInngestRouteImport } from './routes/api/inngest'
 import { Route as ApiGenerateRouteImport } from './routes/api/generate'
 import { Route as ApiResultsResultIdRouteImport } from './routes/api/results.$resultId'
@@ -43,6 +44,11 @@ const ResultResultIdRoute = ResultResultIdRouteImport.update({
   path: '/result/$resultId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ExperienceResultIdRoute = ExperienceResultIdRouteImport.update({
+  id: '/experience/$resultId',
+  path: '/experience/$resultId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiInngestRoute = ApiInngestRouteImport.update({
   id: '/api/inngest',
   path: '/api/inngest',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/start': typeof StartRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/experience/$resultId': typeof ExperienceResultIdRoute
   '/result/$resultId': typeof ResultResultIdRoute
   '/api/results/$resultId': typeof ApiResultsResultIdRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/start': typeof StartRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/experience/$resultId': typeof ExperienceResultIdRoute
   '/result/$resultId': typeof ResultResultIdRoute
   '/api/results/$resultId': typeof ApiResultsResultIdRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/start': typeof StartRoute
   '/api/generate': typeof ApiGenerateRoute
   '/api/inngest': typeof ApiInngestRoute
+  '/experience/$resultId': typeof ExperienceResultIdRoute
   '/result/$resultId': typeof ResultResultIdRoute
   '/api/results/$resultId': typeof ApiResultsResultIdRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/start'
     | '/api/generate'
     | '/api/inngest'
+    | '/experience/$resultId'
     | '/result/$resultId'
     | '/api/results/$resultId'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/start'
     | '/api/generate'
     | '/api/inngest'
+    | '/experience/$resultId'
     | '/result/$resultId'
     | '/api/results/$resultId'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/start'
     | '/api/generate'
     | '/api/inngest'
+    | '/experience/$resultId'
     | '/result/$resultId'
     | '/api/results/$resultId'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   StartRoute: typeof StartRoute
   ApiGenerateRoute: typeof ApiGenerateRoute
   ApiInngestRoute: typeof ApiInngestRoute
+  ExperienceResultIdRoute: typeof ExperienceResultIdRoute
   ResultResultIdRoute: typeof ResultResultIdRoute
   ApiResultsResultIdRoute: typeof ApiResultsResultIdRoute
 }
@@ -171,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultResultIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/experience/$resultId': {
+      id: '/experience/$resultId'
+      path: '/experience/$resultId'
+      fullPath: '/experience/$resultId'
+      preLoaderRoute: typeof ExperienceResultIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/inngest': {
       id: '/api/inngest'
       path: '/api/inngest'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   StartRoute: StartRoute,
   ApiGenerateRoute: ApiGenerateRoute,
   ApiInngestRoute: ApiInngestRoute,
+  ExperienceResultIdRoute: ExperienceResultIdRoute,
   ResultResultIdRoute: ResultResultIdRoute,
   ApiResultsResultIdRoute: ApiResultsResultIdRoute,
 }

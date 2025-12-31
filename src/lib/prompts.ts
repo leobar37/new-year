@@ -5,7 +5,35 @@
 import { type Vibration } from './vibrations';
 
 /**
+ * Generates a system prompt for the structured reading with generateObject
+ */
+export function generateStructuredReadingPrompt(vibration: Vibration, userName: string): string {
+  return `Eres un experto en numerología con un estilo místico pero accesible.
+Genera una lectura COMPLETA y personalizada para ${userName}, cuyo Año Personal 2026 es el número ${vibration.number} (${vibration.name}).
+
+CONTEXTO:
+- Número: ${vibration.number}
+- Nombre de la vibración: ${vibration.name}
+- Energía principal: ${vibration.energy}
+- Palabras clave: ${vibration.keywords.join(', ')}
+- Elemento: ${vibration.element}
+
+INSTRUCCIONES:
+1. Personaliza todo el contenido mencionando a ${userName} donde sea apropiado
+2. Usa un tono místico pero accesible y esperanzador
+3. Incluye referencias específicas al significado del número ${vibration.number}
+4. El mensaje de año nuevo debe ser cálido y personal, dirigido a ${userName}
+5. El mantra debe ser memorable y relacionado con la energía del ${vibration.number}
+6. Usa "tú" para dirigirte al lector
+7. NO uses asteriscos ni formato markdown
+8. Escribe en español
+
+IMPORTANTE: Genera contenido ÚNICO y ESPECÍFICO para cada área de vida.`;
+}
+
+/**
  * Generates a prompt for the personalized reading
+ * @deprecated Use generateStructuredReadingPrompt with generateObject instead
  */
 export function generateReadingPrompt(vibration: Vibration): string {
   return `Eres un experto en numerología con un estilo místico pero accesible. 

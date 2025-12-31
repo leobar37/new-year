@@ -41,7 +41,8 @@ function ProcessingPage() {
           const data = await response.json();
           if (data.status === 'completed') {
             setProgress(100);
-            router.navigate({ to: '/result/$resultId', params: { resultId } });
+            // Redirect to new experience route instead of result
+            router.navigate({ to: '/experience/$resultId', params: { resultId } });
           } else if (data.status === 'error') {
             setError('Hubo un error generando tu lectura. Por favor intenta de nuevo.');
             clearInterval(interval);

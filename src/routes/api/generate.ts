@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 const schema = z.object({
   resultId: z.string().uuid(),
+  userName: z.string().min(1).max(50),
   birthDate: z.string().datetime(),
   vibrationNumber: z.number().min(1).max(9),
   userPhotoBase64: z.string().optional(),

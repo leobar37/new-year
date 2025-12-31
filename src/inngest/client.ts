@@ -16,9 +16,9 @@ export type InngestEvents = {
   'myyear/image.generate': {
     data: {
       resultId: string;
+      userName: string;
+      birthDate: string;
       vibrationNumber: number;
-      vibrationName: string;
-      imageKeywords: string[];
       userPhotoBase64?: string;
     };
   };

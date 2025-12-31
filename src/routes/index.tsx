@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, User } from 'lucide-react';
 import { DatePicker } from '~/components/DatePicker';
 import { PhotoUpload } from '~/components/PhotoUpload';
 import { calculatePersonalYear, validateBirthDate } from '~/lib/numerology';
@@ -13,11 +13,13 @@ export const Route = createFileRoute('/')({
 
 function HomePage() {
   const [dateStr, setDateStr] = useState('');
+  const [userName, setUserName] = useState('');
   const [photo, setPhoto] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const startMutation = useMutation({
     mutationFn: async () => {
+      if (!userName.trim()) throw new Error('Por favor ingresa tu nombre');
       if (!dateStr) throw new Error('Por favor selecciona una fecha válida');
 
       // Parsear YYYY-MM-DD a números locales para evitar problemas de zona horaria
@@ -37,7 +39,7 @@ function HomePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           resultId,
-          // Crear fecha local asegurando que sea mediodía para evitar bordes de cambio de día
+          userName: userName.trim(),
           birthDate: new Date(year, month - 1, day).toISOString(),
           vibrationNumber,
           userPhotoBase64: photo || undefined,
@@ -60,6 +62,11 @@ function HomePage() {
 
   const handleSubmit = () => {
     setError(null);
+    
+    if (!userName.trim()) {
+      setError('Por favor ingresa tu nombre');
+      return;
+    }
     
     // Validate complete date (YYYY-MM-DD format with all parts filled)
     if (!dateStr) {
@@ -110,6 +117,24 @@ function HomePage() {
           <h2 className="text-2xl font-bold text-white mb-6 text-center">Comienza tu viaje</h2>
 
           <div className="space-y-6">
+            {/* Name Input */}
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-2">
+                Tu nombre
+              </label>
+              <div className="relative">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={20} />
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="¿Cómo te llamas?"
+                  className="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 transition-all"
+                  maxLength={50}
+                />
+              </div>
+            </div>
+
             <DatePicker
               value={dateStr}
               onChange={setDateStr}

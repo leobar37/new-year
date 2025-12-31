@@ -5,12 +5,12 @@ export const results = pgTable('results', {
   resultId: text('result_id').unique().notNull(),
 
   // User input
+  userName: text('user_name'),
   birthDate: timestamp('birth_date').notNull(),
   vibrationNumber: integer('vibration_number').notNull(),
 
-  // AI Generated content
-  reading: text('reading'),
-  advice: jsonb('advice'), // Array of strings
+  // AI Generated content - structured reading
+  reading: jsonb('reading'), // StructuredReading object
   imageBlobPath: text('image_blob_path'), // Vercel Blob path
 
   // Status

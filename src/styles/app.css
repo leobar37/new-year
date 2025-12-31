@@ -131,4 +131,158 @@
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
+
+  /* Parallax scroll experience styles */
+  .parallax-container {
+    scroll-snap-type: y proximity;
+    overflow-y: scroll;
+    height: 100vh;
+  }
+
+  .parallax-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+  }
+
+  /* Smooth scroll for all elements */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Text reveal animation */
+  .text-reveal {
+    background: linear-gradient(90deg, 
+      var(--color-gold) 0%, 
+      var(--color-gold-light) 50%, 
+      var(--color-gold) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Glassmorphism card for sections */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+  }
+
+  /* Cosmic glow effect */
+  .cosmic-glow {
+    position: relative;
+  }
+
+  .cosmic-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, 
+      var(--color-gold) 0%, 
+      var(--color-cosmic) 50%, 
+      var(--color-gold) 100%
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(10px);
+  }
+
+  /* Floating animation for icons */
+  .float-slow {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .float-medium {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .float-fast {
+    animation: float 2s ease-in-out infinite;
+  }
+}
+
+/* Parallax-specific keyframes */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  50% {
+    filter: drop-shadow(0 0 30px currentColor);
+  }
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile carousel - scroll snap for horizontal swipe */
+@media (max-width: 768px) {
+  .mobile-carousel {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .mobile-carousel > * {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  /* Full screen sections on mobile use Y snap */
+  .mobile-snap-container {
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+/* Swipe indicator animation */
+@keyframes swipe-hint {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(10px);
+    opacity: 1;
+  }
+}
+
+.swipe-indicator {
+  animation: swipe-hint 1.5s ease-in-out infinite;
+}
+
+/* Touch feedback */
+.touch-feedback {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
+}
+
+.touch-feedback:active {
+  transform: scale(0.98);
 }

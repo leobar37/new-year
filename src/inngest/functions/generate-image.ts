@@ -1,13 +1,13 @@
 import { inngest } from '../client';
 import { google } from '@ai-sdk/google';
-import { generateText } from 'ai';
-import { generateImagePrompt } from '~/lib/prompts';
+import { generateText, generateObject } from 'ai';
+import { generateImagePrompt, generateStructuredReadingPrompt } from '~/lib/prompts';
 import { getVibration } from '~/lib/vibrations';
 import { saveImageToBlob } from '~/lib/blob';
 import { db } from '~/db/client';
 import { results } from '~/db/schema';
 import { eq } from 'drizzle-orm';
-import { generateReadingPrompt, generateAdvicePrompt } from '~/lib/prompts';
+import { readingSchema, type StructuredReading } from '~/lib/schemas/reading-schema';
 
 type ImageGenerationResult = {
   success: boolean;
@@ -23,7 +23,7 @@ export const generateImageFunction = inngest.createFunction(
   },
   { event: 'myyear/image.generate' },
   async ({ event, step }) => {
-    const { resultId, vibrationNumber, birthDate, userPhotoBase64 } = event.data;
+    const { resultId, userName, vibrationNumber, birthDate, userPhotoBase64 } = event.data;
 
     const vibration = getVibration(vibrationNumber);
     if (!vibration) {
@@ -34,33 +34,22 @@ export const generateImageFunction = inngest.createFunction(
     await step.run('save-initial-result', async () => {
       await db.insert(results).values({
         resultId,
+        userName,
         birthDate: new Date(birthDate),
         vibrationNumber,
         status: 'processing',
       }).onConflictDoNothing();
     });
 
-    // Generate reading
-    const readingResult = await step.run('generate-reading', async () => {
-      const result = await generateText({
+    // Generate structured reading using generateObject
+    const readingResult = await step.run('generate-structured-reading', async (): Promise<StructuredReading> => {
+      const result = await generateObject({
         model: google('gemini-2.0-flash-exp'),
-        prompt: generateReadingPrompt(vibration),
+        schema: readingSchema,
+        system: generateStructuredReadingPrompt(vibration, userName),
+        prompt: `Genera una lectura numerológica completa y personalizada para ${userName} con número de vibración ${vibrationNumber} (${vibration.name}) para el año 2026. Incluye todos los campos requeridos: headline, overview, loveLife, career, health, spirituality, advice (5 consejos), newYearMessage y mantra.`,
       });
-      return result.text;
-    });
-
-    // Generate advice
-    const adviceResult = await step.run('generate-advice', async () => {
-      const result = await generateText({
-        model: google('gemini-2.0-flash-exp'),
-        prompt: generateAdvicePrompt(vibration),
-      });
-      const text = result.text;
-      const jsonMatch = text.match(/\[.*\]/s);
-      if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]);
-      }
-      return [];
+      return result.object;
     });
 
     // Generate image
@@ -146,7 +135,6 @@ export const generateImageFunction = inngest.createFunction(
       await db.update(results)
         .set({
           reading: readingResult,
-          advice: adviceResult,
           imageBlobPath: imageResult.url,
           status: 'completed',
         })
@@ -154,13 +142,12 @@ export const generateImageFunction = inngest.createFunction(
       
       return { 
         success: true, 
-        message: `Saved: reading=${!!readingResult}, advice=${adviceResult?.length ?? 0} items, image=${!!imageResult.url}` 
+        message: `Saved: reading structured, image=${!!imageResult.url}` 
       };
     });
 
     return {
       reading: readingResult,
-      advice: adviceResult,
       imageUrl: imageResult.url,
       imageError: imageResult.error,
       dbResult,

@@ -2,6 +2,7 @@ import { db } from '~/db/client';
 import { results } from '~/db/schema';
 import { eq } from 'drizzle-orm';
 import { createFileRoute } from '@tanstack/react-router';
+import { type StructuredReading } from '~/lib/schemas/reading-schema';
 
 export const Route = createFileRoute('/api/results/$resultId')({
   server: {
@@ -26,8 +27,8 @@ export const Route = createFileRoute('/api/results/$resultId')({
           resultId: result.resultId,
           status: result.status,
           vibrationNumber: result.vibrationNumber,
-          reading: result.reading,
-          advice: result.advice,
+          userName: result.userName || 'Viajero',
+          reading: result.reading as StructuredReading,
           imageUrl: includeImage && result.imageBlobPath ? result.imageBlobPath : undefined,
           createdAt: result.createdAt,
         }), {
