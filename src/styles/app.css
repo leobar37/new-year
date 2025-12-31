@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-gold: #FFD700;
+  --color-gold-light: #FFF8DC;
+  --color-gold-dark: #DAA520;
+  --color-gold-muted: #B8860B;
+  
+  --color-night: #0D1B2A;
+  --color-night-light: #1B263B;
+  --color-night-lighter: #415A77;
+  
+  --color-cosmic: #4A0E78;
+  --color-cosmic-light: #7B2CBF;
+  --color-star: #E0E1DD;
+  
+  --font-display: 'Playfair Display', Georgia, serif;
+  
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-pulse-gold: pulse-gold 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; box-shadow: 0 0 20px var(--color-gold); }
+  50% { opacity: 0.8; box-shadow: 0 0 40px var(--color-gold), 0 0 60px var(--color-gold-dark); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-night text-white min-h-screen;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .text-gradient-gold {
+    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-night {
+    background: linear-gradient(180deg, var(--color-night) 0%, var(--color-night-light) 100%);
+  }
+
+  .bg-gradient-gold {
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px var(--color-gold), 0 0 40px rgba(255, 215, 0, 0.3);
+  }
+
+  .glow-gold-sm {
+    box-shadow: 0 0 10px var(--color-gold), 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+
+  .stars-bg {
+    background-image: 
+      radial-gradient(2px 2px at 20px 30px, var(--color-star), transparent),
+      radial-gradient(2px 2px at 40px 70px, var(--color-gold-light), transparent),
+      radial-gradient(1px 1px at 90px 40px, var(--color-star), transparent),
+      radial-gradient(2px 2px at 160px 120px, var(--color-gold), transparent);
+    background-size: 250px 200px;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+
+  .card-mystical {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.8), rgba(13, 27, 42, 0.9));
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-mystical:hover {
+    border-color: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+  }
+
+  .btn-gold {
+    @apply font-semibold py-3 px-6 rounded-lg transition-all duration-300;
+    background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+    color: var(--color-night);
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--color-gold), 0 0 40px rgba(255, 215, 0, 0.3);
+  }
+
+  .number-display {
+    font-family: var(--font-display);
+    font-size: 8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-gold-light), var(--color-gold), var(--color-gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .spinner-gold {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 215, 0, 0.2);
+    border-top-color: var(--color-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
